@@ -28,6 +28,7 @@ Ten projekt implementuje system do wykrywania i łagodzenia ataków DDoS w sieci
 - Mosquitto
 ## Struktura projektu
 
+```
 ├── src
 │   ├── anomaly_controller.py
 │   ├── anomaly_traffic.py
@@ -52,7 +53,7 @@ Ten projekt implementuje system do wykrywania i łagodzenia ataków DDoS w sieci
 │   │   └── video.mp4
 │   └── webserver
 │       └── index.html
-
+```
 
 ## Uruchomienie projektu
 Najpierw należy sprawdzić swój adres IP i zmienić go w kodzie kontrolerów.
