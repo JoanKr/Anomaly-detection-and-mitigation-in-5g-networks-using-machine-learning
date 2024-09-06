@@ -13,19 +13,19 @@ Ten projekt implementuje system do wykrywania i łagodzenia ataków w sieciach 5
 - [Przeciwdziałanie](#Przeciwdziałanie)
 - [Przykład działania](#Przykład-działania)
 ## Technologie
-- VirtualBox (Ubuntu): Wirtualne środowisko, w którym uruchamiana jest symulacja sieci i wszystkie potrzebne narzędzia, aby zachować izolację od systemu hosta.
-- *Python 3.7.17:* Język programowania, w którym napisane są skrypty do uczenia maszynowego, analizy ruchu sieciowego i obsługi kontrolera SDN.
-- *Setuptools 44.1.0:* Służy do zarządzania pakietami i zależnościami w projekcie.
-- *Virtualenv:* Narzędzie do tworzenia izolowanych wirtualnych środowisk Pythona, co pozwala na łatwe zarządzanie zależnościami.
-- *Ryu SDN Framework:* Framework do tworzenia kontrolerów SDN (Software Defined Networking), który zarządza ruchem sieciowym w sieci 5G.
-- *Mininet:* Symulator sieci, używany do tworzenia i testowania wirtualnych topologii sieci, w których przeprowadzane są testy.
-- *Scikit-learn:* Biblioteka do uczenia maszynowego, używana do trenowania modeli klasyfikacji i wykrywania anomalii w ruchu sieciowym.
-- *Pandas:* Narzędzie do przetwarzania danych, używane do analizy i manipulacji danymi w formacie CSV, które są podstawą dla algorytmów uczenia maszynowego.
-- *Matplotlib:* Biblioteka do wizualizacji danych, używana do generowania wykresów i przedstawiania wyników analiz ruchu sieciowego.
-- *Hydra:* Narzędzie do przeprowadzania ataków typu brute-force na usługi takie jak SSH, wykorzystywane do symulowania złośliwego ruchu w sieci.
-- *FFmpeg:* Narzędzie do przetwarzania i strumieniowania multimediów, używane do symulowania ataków związanych z dużym ruchem wideo.
-- *SIPP:* Narzędzie do symulacji ruchu VoIP, wykorzystywane do testowania przeciążenia serwerów SIP w ramach ataków.
-- *Mosquitto:* Broker MQTT, używany do symulacji ruchu IoT, w szczególności złośliwych wiadomości MQTT.
+- **VirtualBox (Ubuntu):** Wirtualne środowisko, w którym uruchamiana jest symulacja sieci i wszystkie potrzebne narzędzia, aby zachować izolację od systemu hosta.
+- **Python 3.7.17:** Język programowania, w którym napisane są skrypty do uczenia maszynowego, analizy ruchu sieciowego i obsługi kontrolera SDN.
+- **Setuptools 44.1.0:** Służy do zarządzania pakietami i zależnościami w projekcie.
+- **Virtualenv:** Narzędzie do tworzenia izolowanych wirtualnych środowisk Pythona, co pozwala na łatwe zarządzanie zależnościami.
+- **Ryu SDN Framework:** Framework do tworzenia kontrolerów SDN (Software Defined Networking), który zarządza ruchem sieciowym w sieci 5G.
+- **Mininet:** Symulator sieci, używany do tworzenia i testowania wirtualnych topologii sieci, w których przeprowadzane są testy.
+- **Scikit-learn:** Biblioteka do uczenia maszynowego, używana do trenowania modeli klasyfikacji i wykrywania anomalii w ruchu sieciowym.
+- **Pandas:** Narzędzie do przetwarzania danych, używane do analizy i manipulacji danymi w formacie CSV, które są podstawą dla algorytmów uczenia maszynowego.
+- **Matplotlib:** Biblioteka do wizualizacji danych, używana do generowania wykresów i przedstawiania wyników analiz ruchu sieciowego.
+- **Hydra:** Narzędzie do przeprowadzania ataków typu brute-force na usługi takie jak SSH, wykorzystywane do symulowania złośliwego ruchu w sieci.
+- **FFmpeg:** Narzędzie do przetwarzania i strumieniowania multimediów, używane do symulowania ataków związanych z dużym ruchem wideo.
+- **SIPP:** Narzędzie do symulacji ruchu VoIP, wykorzystywane do testowania przeciążenia serwerów SIP w ramach ataków.
+- **Mosquitto:** Broker MQTT, używany do symulacji ruchu IoT, w szczególności złośliwych wiadomości MQTT.
 ## Struktura projektu
 
 ```
@@ -76,21 +76,21 @@ sudo python3 normal_traffic.py
 ```
 ## Wybrane anomalie w sieciach
 
-- *ICMP Flood:* Generowanie nadmiernej liczby pingów (ping flood), co ma na celu przeciążenie ofiary dużą ilością żądań ICMP.
+- **ICMP Flood:** Generowanie nadmiernej liczby pingów (ping flood), co ma na celu przeciążenie ofiary dużą ilością żądań ICMP.
 
-- *TCP SYN Flood:* Atak polegający na wysyłaniu dużej liczby pakietów TCP SYN, co ma na celu zajęcie zasobów serwera poprzez nieukończone połączenia.
+- **TCP SYN Flood:** Atak polegający na wysyłaniu dużej liczby pakietów TCP SYN, co ma na celu zajęcie zasobów serwera poprzez nieukończone połączenia.
 
-- *UDP Flood:* Atak typu flood, który wysyła dużą ilość pakietów UDP do serwera, co ma na celu przeciążenie serwera i spowodowanie jego awarii.
+- **UDP Flood:** Atak typu flood, który wysyła dużą ilość pakietów UDP do serwera, co ma na celu przeciążenie serwera i spowodowanie jego awarii.
 
-- *HTTP Flood:* Generowanie nadmiernych żądań HTTP w krótkim czasie, co prowadzi do przeciążenia serwera internetowego.
+- **HTTP Flood:** Generowanie nadmiernych żądań HTTP w krótkim czasie, co prowadzi do przeciążenia serwera internetowego.
 
-- *SSH Brute Force:* Próba wielokrotnego logowania się do serwera SSH przy użyciu różnych haseł, co ma na celu złamanie zabezpieczeń logowania (atak siłowy).
+- **SSH Brute Force:** Próba wielokrotnego logowania się do serwera SSH przy użyciu różnych haseł, co ma na celu złamanie zabezpieczeń logowania (atak siłowy).
 
-- *Strumieniowanie wideo:* Generowanie ruchu strumieniowania wideo o wysokiej przepustowości, co przeciąża sieć i zasoby serwera.
+- **Strumieniowanie wideo:** Generowanie ruchu strumieniowania wideo o wysokiej przepustowości, co przeciąża sieć i zasoby serwera.
 
-- *MQTT Flood (IoT):* Publikowanie dużej liczby złośliwych wiadomości MQTT, co prowadzi do przeciążenia systemu komunikacji IoT.
+- **MQTT Flood (IoT):** Publikowanie dużej liczby złośliwych wiadomości MQTT, co prowadzi do przeciążenia systemu komunikacji IoT.
 
-- *VoIP Flood:* Generowanie wysokiego ruchu VoIP (SIP), co prowadzi do przeciążenia serwera obsługującego połączenia VoIP.
+- **VoIP Flood:** Generowanie wysokiego ruchu VoIP (SIP), co prowadzi do przeciążenia serwera obsługującego połączenia VoIP.
   
 ## Zbieranie danych
 
