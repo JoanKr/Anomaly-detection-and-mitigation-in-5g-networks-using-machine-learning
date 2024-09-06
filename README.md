@@ -1,7 +1,7 @@
 
 # Wykrywanie i łagodzenie anomalii w sieciach 5G z wykorzystaniem uczenia maszynowego 
 
-Ten projekt implementuje system do wykrywania i łagodzenia ataków DDoS w sieciach 5G za pomocą technik uczenia maszynowego. Wykorzystuje kontroler SDN oparty na frameworku Ryu oraz modele uczenia maszynowego do analizy ruchu sieciowego i wykrywania anomalii.
+Ten projekt implementuje system do wykrywania i łagodzenia ataków w sieciach 5G za pomocą technik uczenia maszynowego. Wykorzystuje kontroler SDN oparty na frameworku Ryu oraz modele uczenia maszynowego do analizy ruchu sieciowego i wykrywania anomalii.
 
 ## Spis treści
 - [Technologie](#Technologie)
