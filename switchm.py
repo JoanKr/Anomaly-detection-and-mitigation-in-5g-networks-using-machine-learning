@@ -18,8 +18,9 @@ FLOW_SERIAL_NO = 0
 
 def get_flow_number():
     global FLOW_SERIAL_NO
-    FLOW_SERIAL_NO += 1
+    FLOW_SERIAL_NO = FLOW_SERIAL_NO + 1
     return FLOW_SERIAL_NO
+
 
 class SimpleSwitch13(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -46,7 +47,8 @@ class SimpleSwitch13(app_manager.RyuApp):
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
 
-        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
+        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS,
+                                             actions)]
         if buffer_id:
             mod = parser.OFPFlowMod(datapath=datapath, cookie=serial_no, buffer_id=buffer_id,
                                     idle_timeout=idle, hard_timeout=hard,
@@ -56,25 +58,22 @@ class SimpleSwitch13(app_manager.RyuApp):
             mod = parser.OFPFlowMod(datapath=datapath, cookie=serial_no, priority=priority,
                                     idle_timeout=idle, hard_timeout=hard,
                                     match=match, instructions=inst)
+            
         datapath.send_msg(mod)
 
-    def block_port(self, datapath, portnumber, src_ip=None):
+    def block_port(self, datapath, portnumber):
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
         match = parser.OFPMatch(in_port=portnumber)
         actions = []
         flow_serial_no = get_flow_number()
         self.add_flow(datapath, 100, match, actions, flow_serial_no, hard=120)
-        
-        if src_ip:
-            self.logger.info(f"Blocked port {portnumber} for IP {src_ip} on switch {datapath.id}")
-        else:
-            self.logger.info(f"Blocked port {portnumber} on switch {datapath.id}")
 
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def _packet_in_handler(self, ev):
         if ev.msg.msg_len < ev.msg.total_len:
-            self.logger.debug("Packet truncated: only %s of %s bytes", ev.msg.msg_len, ev.msg.total_len)
+            self.logger.debug("packet truncated: only %s of %s bytes",
+                              ev.msg.msg_len, ev.msg.total_len)
         msg = ev.msg
         datapath = msg.datapath
         ofproto = datapath.ofproto
@@ -103,55 +102,66 @@ class SimpleSwitch13(app_manager.RyuApp):
             out_port = ofproto.OFPP_FLOOD
 
         actions = [parser.OFPActionOutput(out_port)]
-        # If ARP Request packet, log the IP and MAC Address from that port
+        #if ARP Request packet , log the IP and MAC Address from that port
         if eth.ethertype == ether_types.ETH_TYPE_ARP:
+            #self.logger.info("Received ARP Packet %s %s %s ", dpid, src, dst)
             a = pkt.get_protocol(arp.arp)
+            #print "arp packet ", a
             if a.opcode == arp.ARP_REQUEST or a.opcode == arp.ARP_REPLY:
                 if not a.src_ip in self.arp_ip_to_port[dpid][in_port]:
                     self.arp_ip_to_port[dpid][in_port].append(a.src_ip)
 
-        # Install a flow to avoid packet_in next time
+        # install a flow to avoid packet_in next time
         if out_port != ofproto.OFPP_FLOOD:
 
-            # Check IP Protocol and create a match for IP
+            # check IP Protocol and create a match for IP
             if eth.ethertype == ether_types.ETH_TYPE_IP:
                 ip = pkt.get_protocol(ipv4.ipv4)
                 srcip = ip.src
                 dstip = ip.dst
                 protocol = ip.proto
 
-                # If ICMP Protocol
+                # if ICMP Protocol
                 if protocol == in_proto.IPPROTO_ICMP:
                     t = pkt.get_protocol(icmp.icmp)
                     match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP,
                                             ipv4_src=srcip, ipv4_dst=dstip,
-                                            ip_proto=protocol, icmpv4_code=t.code,
+                                            ip_proto=protocol,icmpv4_code=t.code,
                                             icmpv4_type=t.type)
 
-                # If TCP Protocol
+                #  if TCP Protocol
                 elif protocol == in_proto.IPPROTO_TCP:
                     t = pkt.get_protocol(tcp.tcp)
                     match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP,
                                             ipv4_src=srcip, ipv4_dst=dstip,
                                             ip_proto=protocol,
-                                            tcp_src=t.src_port, tcp_dst=t.dst_port)
+                                            tcp_src=t.src_port, tcp_dst=t.dst_port,)
 
-                # If UDP Protocol
+                #  If UDP Protocol
                 elif protocol == in_proto.IPPROTO_UDP:
                     u = pkt.get_protocol(udp.udp)
                     match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP,
                                             ipv4_src=srcip, ipv4_dst=dstip,
                                             ip_proto=protocol,
-                                            udp_src=u.src_port, udp_dst=u.dst_port)
-
+                                            udp_src=u.src_port, udp_dst=u.dst_port,)
+                    
+                    
                 if self.mitigation:
-                    if not (srcip in self.arp_ip_to_port[dpid][in_port]):
-                        self.logger.info(f"Attack detected from port {in_port} with IP {srcip}")
-                        self.logger.info(f"Blocking the port {in_port}")
-                        self.block_port(datapath, in_port, src_ip=srcip)
+                    if (srcip in self.arp_ip_to_port[dpid][in_port]):
+                        if srcip == '10.0.0.1':
+                            return
+                        self.logger.info("NOTICE!! Attack in Progress!!!")
+                        self.logger.info(f"Source IP: {srcip}")
+                        self.logger.info(f"Port: {in_port}")
+                        self.logger.info(f"Switch S{dpid}")
+                        print("------------------------------------------------------------------------------")
+                        print("Block the port ", in_port)
+                        print("------------------------------------------------------------------------------")
+                        self.block_port(datapath, in_port)
                         return
 
-                # Verify if we have a valid buffer_id, if yes avoid to send both
+
+                # verify if we have a valid buffer_id, if yes avoid to send both
                 # flow_mod & packet_out
                 flow_serial_no = get_flow_number()
                 if msg.buffer_id != ofproto.OFP_NO_BUFFER:
