@@ -79,7 +79,7 @@ class MyTopo(Topo):
         self.addLink(s5, s6)
 
 def ip_generator():
-    ip = ".".join(["10", "0", "0", str(randrange(1, 19))])
+    ip = ".".join(["10", "0", "0", str(randrange(3, 19))])
     return ip
 
 def startNetwork():
@@ -108,7 +108,7 @@ def startNetwork():
     h17 = net.get('h17')
     h18 = net.get('h18')
 
-    hosts = [h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18]
+    hosts = [h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18]
 
     print("--------------------------------------------------------------------------------")
     print("Generating traffic ...")
@@ -120,70 +120,24 @@ def startNetwork():
     h2.cmd('service ssh start')
     h2.cmd('dnsmasq &')
     h2.cmd('mosquitto -d')
-    sleep(2)
+    sleep(10)
 
     for h in hosts:
         h.cmd('cd /home/joanna/Downloads/5G_Anomaly_Detection/src/mininet/Downloads')
     
-    for i in range(3):
+    for i in range(5):
         print("--------------------------------------------------------------------------------")
         print("Iteration n {} ...".format(i+1))
         print("--------------------------------------------------------------------------------")
 
-        for j in range(2):
+        for j in range(5):
             src = choice(hosts)
             dst = ip_generator()
 
-            # Generowanie różnorodnego ruchu
-            print("Generating traffic from %s to %s" % (src, dst))
+            # Generowanie różnorodnego ruchu z anomaliami
+            print("Generating anomalous traffic from %s to %s" % (src, dst))
 
-            # Generowanie ruchu ICMP (ping)
-            print("Generating ICMP traffic from %s to %s" % (src, dst))
-            src.cmd("ping {} -c 5 -w 5".format(dst))
-            sleep(2)
-
-            # Generowanie ruchu TCP (iperf)
-            print("Generating TCP traffic from %s to 10.0.0.1" % src)
-            src.cmd("iperf -p 5050 -c 10.0.0.1 -b 10M")
-            sleep(2)
-
-            # Generowanie ruchu UDP (iperf)
-            print("Generating UDP traffic from %s to 10.0.0.1" % src)
-            src.cmd("iperf -p 5051 -u -c 10.0.0.1 -b 5M")
-            sleep(2)
-
-            # Generowanie ruchu HTTP (curl)
-            print("%s downloading index.html from 10.0.0.1" % src)
-            src.cmd("timeout 5s curl -O http://10.0.0.1/index.html")
-            sleep(2)
-
-            # Generowanie ruchu SCP (transfer pliku)
-            print("Transferring test.zip from %s to 10.0.0.2 via SCP" % src)
-            src.cmd("scp /home/joanna/Downloads/5G_Anomaly_Detection/src/mininet/Downloads/test.zip mininet@10.0.0.2:/home/joanna/Downloads/5G_Anomaly_Detection/src/mininet/Downloads/")
-            sleep(2)
-
-            # Generowanie ruchu strumieniowania wideo (ffmpeg)
-            print("Streaming video from %s to 10.0.0.2 via UDP" % src)
-            src.cmd("ffmpeg -re -i /home/joanna/Downloads/5G_Anomaly_Detection/src/videos/video.mp4 -vf scale=640:360 -b:v 500k -f mpegts udp://10.0.0.2:1234")
-            sleep(2)
-
-            # Generowanie ruchu IoT (MQTT)
-            print("Publishing MQTT message from %s to topic 'sensor/temperature' on 10.0.0.2" % src)
-            src.cmd("mosquitto_pub -h 10.0.0.2 -t 'sensor/temperature' -m '25.3'")
-            sleep(2)
-
-            # Generowanie ruchu VoIP (SIP)
-            print("Generating VoIP traffic from %s to 10.0.0.2 via SIP" % src)
-            src.cmd("sipp -sn uac 10.0.0.2:5060 -m 1")
-            sleep(2)
-
-            # Generowanie ruchu DNS (dig)
-            print("Generating DNS query from %s to 10.0.0.2 for domain 'example.com'" % src)
-            src.cmd("timeout 5s dig @10.0.0.2 example.com")
-            sleep(2)
-
-
-                        # Generowanie ICMP Flood (anomalna ilość pingów)
+            # Generowanie ICMP Flood (anomalna ilość pingów)
             print("Generating ICMP Flood traffic from %s to %s" % (src, dst))
             src.cmd("timeout 20s ping {} -c 1000 -i 0.001".format(dst))
             sleep(2)
@@ -225,11 +179,62 @@ def startNetwork():
 
             print("--------------------------------------------------------------------------------")  
 
+            
+            # Generowanie ruchu
+            print("Generating normal traffic from %s to %s" % (src, dst))
+
+            # Generowanie ruchu ICMP (ping)
+            print("Generating ICMP traffic from %s to %s" % (src, dst))
+            src.cmd("ping {} -c 5 -w 5".format(dst))
+            sleep(0.1)
+
+            # Generowanie ruchu TCP (iperf)
+            print("Generating TCP traffic from %s to 10.0.0.1" % src)
+            src.cmd("iperf -p 5050 -c 10.0.0.1 -b 10M")
+            sleep(0.1)
+
+            # Generowanie ruchu UDP (iperf)
+            print("Generating UDP traffic from %s to 10.0.0.1" % src)
+            src.cmd("iperf -p 5051 -u -c 10.0.0.1 -b 5M")
+            sleep(0.1)
+
+            # Generowanie ruchu HTTP (curl)
+            print("%s downloading index.html from 10.0.0.1" % src)
+            src.cmd("timeout 5s curl -O http://10.0.0.1/index.html")
+            sleep(0.1)
+
+            # Generowanie ruchu SCP (transfer pliku)
+            print("Transferring test.zip from %s to 10.0.0.2 via SCP" % src)
+            src.cmd("scp /home/joanna/Downloads/5G_Anomaly_Detection/src/mininet/Downloads/test.zip mininet@10.0.0.2:/home/joanna/Downloads/5G_Anomaly_Detection/src/mininet/Downloads/")
+            sleep(0.1)
+
+            # Generowanie ruchu strumieniowania wideo (ffmpeg)
+            print("Streaming video from %s to 10.0.0.2 via UDP" % src)
+            src.cmd("ffmpeg -re -i /home/joanna/Downloads/5G_Anomaly_Detection/src/videos/video.mp4 -vf scale=640:360 -b:v 500k -f mpegts udp://10.0.0.2:1234")
+            sleep(0.1)
+
+            # Generowanie ruchu IoT (MQTT)
+            print("Publishing MQTT message from %s to topic 'sensor/temperature' on 10.0.0.2" % src)
+            src.cmd("mosquitto_pub -h 10.0.0.2 -t 'sensor/temperature' -m '25.3'")
+            sleep(0.1)
+
+            # Generowanie ruchu VoIP (SIP)
+            print("Generating VoIP traffic from %s to 10.0.0.2 via SIP" % src)
+            src.cmd("sipp -sn uac 10.0.0.2:5060 -m 1")
+            sleep(0.1)
+
+            # Generowanie ruchu DNS (dig)
+            print("Generating DNS query from %s to 10.0.0.2 for domain 'example.com'" % src)
+            src.cmd("timeout 5s dig @10.0.0.2 example.com")
+            sleep(0.1)
+
+            print("--------------------------------------------------------------------------------")  
 
         # Czyszczenie pobranych plików
         h1.cmd("rm -f /home/joanna/Downloads/5G_Anomaly_Detection/src/mininet/Downloads/*")
 
     print("--------------------------------------------------------------------------------")  
+    
     
     net.stop()
 
