@@ -61,59 +61,57 @@ class SimpleMonitor13(switchm.SimpleSwitch13):
         timestamp = datetime.now()
         timestamp = timestamp.timestamp()
 
-        file0 = open("PredictFlowStatsfile.csv","w")
-        file0.write('timestamp,datapath_id,flow_id,ip_src,tp_src,ip_dst,tp_dst,ip_proto,icmp_code,icmp_type,flow_duration_sec,flow_duration_nsec,idle_timeout,hard_timeout,flags,packet_count,byte_count,packet_count_per_second,packet_count_per_nsecond,byte_count_per_second,byte_count_per_nsecond\n')
-        body = ev.msg.body
-        icmp_code = -1
-        icmp_type = -1
-        tp_src = 0
-        tp_dst = 0
+        with open("PredictFlowStatsfile.csv", "w") as file0:
+            file0.write('timestamp,datapath_id,flow_id,ip_src,tp_src,ip_dst,tp_dst,ip_proto,icmp_code,icmp_type,flow_duration_sec,flow_duration_nsec,idle_timeout,hard_timeout,flags,packet_count,byte_count,packet_count_per_second,packet_count_per_nsecond,byte_count_per_second,byte_count_per_nsecond\n')
+            body = ev.msg.body
+            icmp_code = -1
+            icmp_type = -1
+            tp_src = 0
+            tp_dst = 0
 
-        for stat in sorted([flow for flow in body if (flow.priority == 1) ], key=lambda flow:
-            (flow.match['eth_type'],flow.match['ipv4_src'],flow.match['ipv4_dst'],flow.match['ip_proto'])):
-        
-            ip_src = stat.match['ipv4_src']
-            ip_dst = stat.match['ipv4_dst']
-            ip_proto = stat.match['ip_proto']
-            
-            if stat.match['ip_proto'] == 1:
-                icmp_code = stat.match['icmpv4_code']
-                icmp_type = stat.match['icmpv4_type']
-                
-            elif stat.match['ip_proto'] == 6:
-                tp_src = stat.match['tcp_src']
-                tp_dst = stat.match['tcp_dst']
+            for stat in sorted([flow for flow in body if (flow.priority == 1)], key=lambda flow:
+                               (flow.match['eth_type'], flow.match['ipv4_src'], flow.match['ipv4_dst'], flow.match['ip_proto'])):
 
-            elif stat.match['ip_proto'] == 17:
-                tp_src = stat.match['udp_src']
-                tp_dst = stat.match['udp_dst']
+                ip_src = stat.match['ipv4_src']
+                ip_dst = stat.match['ipv4_dst']
+                ip_proto = stat.match['ip_proto']
 
-            flow_id = str(ip_src) + str(tp_src) + str(ip_dst) + str(tp_dst) + str(ip_proto)
-          
-            try:
-                packet_count_per_second = stat.packet_count/stat.duration_sec
-                packet_count_per_nsecond = stat.packet_count/stat.duration_nsec
-            except:
-                packet_count_per_second = 0
-                packet_count_per_nsecond = 0
-                
-            try:
-                byte_count_per_second = stat.byte_count/stat.duration_sec
-                byte_count_per_nsecond = stat.byte_count/stat.duration_nsec
-            except:
-                byte_count_per_second = 0
-                byte_count_per_nsecond = 0
-                
-            file0.write("{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n"
-                .format(timestamp, ev.msg.datapath.id, flow_id, ip_src, tp_src,ip_dst, tp_dst,
-                        stat.match['ip_proto'],icmp_code,icmp_type,
-                        stat.duration_sec, stat.duration_nsec,
-                        stat.idle_timeout, stat.hard_timeout,
-                        stat.flags, stat.packet_count,stat.byte_count,
-                        packet_count_per_second,packet_count_per_nsecond,
-                        byte_count_per_second,byte_count_per_nsecond))
-            
-        file0.close()
+                if stat.match['ip_proto'] == 1:
+                    icmp_code = stat.match['icmpv4_code']
+                    icmp_type = stat.match['icmpv4_type']
+
+                elif stat.match['ip_proto'] == 6:
+                    tp_src = stat.match['tcp_src']
+                    tp_dst = stat.match['tcp_dst']
+
+                elif stat.match['ip_proto'] == 17:
+                    tp_src = stat.match['udp_src']
+                    tp_dst = stat.match['udp_dst']
+
+                flow_id = str(ip_src) + str(tp_src) + str(ip_dst) + str(tp_dst) + str(ip_proto)
+
+                try:
+                    packet_count_per_second = stat.packet_count / stat.duration_sec
+                    packet_count_per_nsecond = stat.packet_count / stat.duration_nsec
+                except:
+                    packet_count_per_second = 0
+                    packet_count_per_nsecond = 0
+
+                try:
+                    byte_count_per_second = stat.byte_count / stat.duration_sec
+                    byte_count_per_nsecond = stat.byte_count / stat.duration_nsec
+                except:
+                    byte_count_per_second = 0
+                    byte_count_per_nsecond = 0
+
+                file0.write("{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n"
+                            .format(timestamp, ev.msg.datapath.id, flow_id, ip_src, tp_src, ip_dst, tp_dst,
+                                    stat.match['ip_proto'], icmp_code, icmp_type,
+                                    stat.duration_sec, stat.duration_nsec,
+                                    stat.idle_timeout, stat.hard_timeout,
+                                    stat.flags, stat.packet_count, stat.byte_count,
+                                    packet_count_per_second, packet_count_per_nsecond,
+                                    byte_count_per_second, byte_count_per_nsecond))
 
     def flow_training(self):
 
@@ -137,7 +135,7 @@ class SimpleMonitor13(switchm.SimpleSwitch13):
 
         y_flow_pred = self.flow_model.predict(X_flow_test)
 
-        self.logger.info("------------------------------------------------------------------------------")
+        #self.logger.info("------------------------------------------------------------------------------")
 
         self.logger.info("Confusion Matrix")
         cm = confusion_matrix(y_flow_test, y_flow_pred)
@@ -157,30 +155,23 @@ class SimpleMonitor13(switchm.SimpleSwitch13):
             y_flow_pred = self.flow_model.predict(X_predict_flow)
 
             legitimate_trafic = 0
-            ddos_trafic = 0
 
             for i in y_flow_pred:
                 if i == 0:
-                    legitimate_trafic = legitimate_trafic + 1
-                else:
-                    ddos_trafic = ddos_trafic + 1
-                    victim = int(predict_flow_dataset.iloc[i, 5]) % 20
+                    legitimate_trafic += 1
+
                     
-            self.logger.info("------------------------------------------------------------------------------")
-            if (legitimate_trafic/len(y_flow_pred)*100) > 80:
-                self.logger.info("Traffic is Normal!")
-            else:
-                self.logger.info("NOTICE!! Attack in Progress!!!")
-                self.logger.info("Victim Host: h{}".format(victim))
+            if (legitimate_trafic / len(y_flow_pred) * 100) < 95:
+                self.logger.info("------------------------------------------------------------------------------")
                 print("Mitigation process in progress!")
                 self.mitigation = 1
 
-            self.logger.info("------------------------------------------------------------------------------")
+                self.logger.info("------------------------------------------------------------------------------")
             
-            file0 = open("PredictFlowStatsfile.csv","w")
-            
-            file0.write('timestamp,datapath_id,flow_id,ip_src,tp_src,ip_dst,tp_dst,ip_proto,icmp_code,icmp_type,flow_duration_sec,flow_duration_nsec,idle_timeout,hard_timeout,flags,packet_count,byte_count,packet_count_per_second,packet_count_per_nsecond,byte_count_per_second,byte_count_per_nsecond\n')
-            file0.close()
+            with open("PredictFlowStatsfile.csv", "w") as file0:
+                file0.write('timestamp,datapath_id,flow_id,ip_src,tp_src,ip_dst,tp_dst,ip_proto,icmp_code,icmp_type,flow_duration_sec,flow_duration_nsec,idle_timeout,hard_timeout,flags,packet_count,byte_count,packet_count_per_second,packet_count_per_nsecond,byte_count_per_second,byte_count_per_nsecond\n')
+
 
         except:
             pass
+
