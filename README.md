@@ -15,7 +15,7 @@ Ten projekt implementuje system do wykrywania i łagodzenia ataków w sieciach 5
 ## Technologie
 - VirtualBox (Ubuntu): Wirtualne środowisko, w którym uruchamiana jest symulacja sieci i wszystkie potrzebne narzędzia, aby zachować izolację od systemu hosta.
 - *Python 3.7.17:* Język programowania, w którym napisane są skrypty do uczenia maszynowego, analizy ruchu sieciowego i obsługi kontrolera SDN.
-- *Setuptools 44.1.0:*( Służy do zarządzania pakietami i zależnościami w projekcie.
+- *Setuptools 44.1.0:* Służy do zarządzania pakietami i zależnościami w projekcie.
 - *Virtualenv:* Narzędzie do tworzenia izolowanych wirtualnych środowisk Pythona, co pozwala na łatwe zarządzanie zależnościami.
 - *Ryu SDN Framework:* Framework do tworzenia kontrolerów SDN (Software Defined Networking), który zarządza ruchem sieciowym w sieci 5G.
 - *Mininet:* Symulator sieci, używany do tworzenia i testowania wirtualnych topologii sieci, w których przeprowadzane są testy.
