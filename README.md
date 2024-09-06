@@ -7,7 +7,7 @@ Ten projekt implementuje system do wykrywania i łagodzenia ataków w sieciach 5
 - [Technologie](#Technologie)
 - [Struktura projektu](#Struktura-projektu)
 - [Uruchamianie projektu](#Uruchomienie-projektu)
-- [Wybrane ataki](#Wybrane-ataki)
+- [Wybrane anomalie w sieciach](#Wybrane-anomalie-w-sieciach)
 - [Zbieranie danych](#Zbieranie-danych)
 - [Uczenie Maszynowe](#Uczenie-Maszynowe)
 - [Przeciwdziałanie](#Przeciwdziałanie)
