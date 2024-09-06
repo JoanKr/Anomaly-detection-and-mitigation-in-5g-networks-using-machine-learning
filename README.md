@@ -13,19 +13,19 @@ Ten projekt implementuje system do wykrywania i łagodzenia ataków w sieciach 5
 - [Przeciwdziałanie](#Przeciwdziałanie)
 - [Przykład działania](#Przykład-działania)
 ## Technologie
-- VirtualBox (Ubuntu)
-- Python 3.7.17
-- Setuptools 44.1.0
-- Virtualenv
-- Ryu SDN Framework
-- Mininet
-- Scikit-learn
-- Pandas
-- Matplotlib
-- Hydra
-- FFmpeg
-- SIPP
-- Mosquitto
+- VirtualBox (Ubuntu): Wirtualne środowisko, w którym uruchamiana jest symulacja sieci i wszystkie potrzebne narzędzia, aby zachować izolację od systemu hosta.
+- Python 3.7.17: Język programowania, w którym napisane są skrypty do uczenia maszynowego, analizy ruchu sieciowego i obsługi kontrolera SDN.
+- Setuptools 44.1.0: Służy do zarządzania pakietami i zależnościami w projekcie.
+- Virtualenv: Narzędzie do tworzenia izolowanych wirtualnych środowisk Pythona, co pozwala na łatwe zarządzanie zależnościami.
+- Ryu SDN Framework: Framework do tworzenia kontrolerów SDN (Software Defined Networking), który zarządza ruchem sieciowym w sieci 5G.
+- Mininet: Symulator sieci, używany do tworzenia i testowania wirtualnych topologii sieci, w których przeprowadzane są testy.
+- Scikit-learn: Biblioteka do uczenia maszynowego, używana do trenowania modeli klasyfikacji i wykrywania anomalii w ruchu sieciowym.
+- Pandas: Narzędzie do przetwarzania danych, używane do analizy i manipulacji danymi w formacie CSV, które są podstawą dla algorytmów uczenia maszynowego.
+- Matplotlib: Biblioteka do wizualizacji danych, używana do generowania wykresów i przedstawiania wyników analiz ruchu sieciowego.
+- Hydra: Narzędzie do przeprowadzania ataków typu brute-force na usługi takie jak SSH, wykorzystywane do symulowania złośliwego ruchu w sieci.
+- FFmpeg: Narzędzie do przetwarzania i strumieniowania multimediów, używane do symulowania ataków związanych z dużym ruchem wideo.
+- SIPP: Narzędzie do symulacji ruchu VoIP, wykorzystywane do testowania przeciążenia serwerów SIP w ramach ataków.
+- Mosquitto: Broker MQTT, używany do symulacji ruchu IoT, w szczególności złośliwych wiadomości MQTT.
 ## Struktura projektu
 
 ```
