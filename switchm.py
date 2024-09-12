@@ -102,19 +102,14 @@ class SimpleSwitch13(app_manager.RyuApp):
             out_port = ofproto.OFPP_FLOOD
 
         actions = [parser.OFPActionOutput(out_port)]
-        #if ARP Request packet , log the IP and MAC Address from that port
         if eth.ethertype == ether_types.ETH_TYPE_ARP:
-            #self.logger.info("Received ARP Packet %s %s %s ", dpid, src, dst)
             a = pkt.get_protocol(arp.arp)
-            #print "arp packet ", a
             if a.opcode == arp.ARP_REQUEST or a.opcode == arp.ARP_REPLY:
                 if not a.src_ip in self.arp_ip_to_port[dpid][in_port]:
                     self.arp_ip_to_port[dpid][in_port].append(a.src_ip)
 
-        # install a flow to avoid packet_in next time
         if out_port != ofproto.OFPP_FLOOD:
 
-            # check IP Protocol and create a match for IP
             if eth.ethertype == ether_types.ETH_TYPE_IP:
                 ip = pkt.get_protocol(ipv4.ipv4)
                 srcip = ip.src
@@ -161,8 +156,6 @@ class SimpleSwitch13(app_manager.RyuApp):
                         return
 
 
-                # verify if we have a valid buffer_id, if yes avoid to send both
-                # flow_mod & packet_out
                 flow_serial_no = get_flow_number()
                 if msg.buffer_id != ofproto.OFP_NO_BUFFER:
                     self.add_flow(datapath, 1, match, actions, flow_serial_no, msg.buffer_id, idle=20, hard=100)
