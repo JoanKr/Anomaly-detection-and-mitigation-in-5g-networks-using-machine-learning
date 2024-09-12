@@ -12,12 +12,10 @@ class CollectTrainingStatsApp(switch.SimpleSwitch13):
         self.datapaths = {}
         self.monitor_thread = hub.spawn(self.monitor)
 
-        # Otwieranie pliku w trybie 'a' (append) i sprawdzenie, czy plik istnieje, jeśli nie, zapisujemy nagłówki
         try:
             with open("/home/joanna/Downloads/5G_Anomaly_Detection/src/FlowStatsfile.csv", "r") as file_check:
-                pass  # Plik istnieje, nie robimy nic
+                pass  
         except FileNotFoundError:
-            # Plik nie istnieje, więc zapisujemy nagłówki
             with open("/home/joanna/Downloads/5G_Anomaly_Detection/src/FlowStatsfile.csv", "w") as file0:
                 file0.write('timestamp,datapath_id,flow_id,ip_src,tp_src,ip_dst,tp_dst,ip_proto,icmp_code,icmp_type,flow_duration_sec,flow_duration_nsec,idle_timeout,hard_timeout,flags,packet_count,byte_count,packet_count_per_second,packet_count_per_nsecond,byte_count_per_second,byte_count_per_nsecond,label\n')
 
@@ -53,7 +51,6 @@ class CollectTrainingStatsApp(switch.SimpleSwitch13):
         tp_src = 0
         tp_dst = 0
 
-        # Otwieranie pliku w trybie 'a+' (append) do dopisania danych na końcu pliku
         with open("/home/joanna/Downloads/5G_Anomaly_Detection/src/FlowStatsfile.csv", "a+") as file0:
             body = ev.msg.body
             for stat in sorted([flow for flow in body if (flow.priority == 1)], key=lambda flow:
