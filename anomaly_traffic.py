@@ -45,7 +45,6 @@ class MyTopo(Topo):
         h17 = self.addHost('h17', cpu=1.0/20, mac="00:00:00:00:00:17", ip="10.0.0.17/24")
         h18 = self.addHost('h18', cpu=1.0/20, mac="00:00:00:00:00:18", ip="10.0.0.18/24")
 
-        # Dodawanie połączeń
         self.addLink(h1, s1)
         self.addLink(h2, s1)
         self.addLink(h3, s1)
@@ -135,58 +134,43 @@ def startNetwork():
             src = choice(hosts)
             dst = ip_generator()
 
-            # Generowanie różnorodnego ruchu z anomaliami
             print("Generating anomalous traffic from %s to %s" % (src, dst))
 
-            # Generowanie ICMP Flood (anomalna ilość pingów)
             print("Generating ICMP Flood traffic from %s to %s" % (src, dst))
             src.cmd("timeout 20s ping {} -c 1000 -i 0.001".format(dst))
             sleep(2)
 
-            # Generowanie TCP SYN Flood (anomalny ruch TCP)
             print("Generating TCP SYN Flood traffic from %s to 10.0.0.1" % src)
             src.cmd("timeout 20s hping3 -S -p 5050 -i u1000 10.0.0.1")
             sleep(2)
 
-            # Generowanie UDP Flood (anomalny ruch UDP)
             print("Generating UDP Flood traffic from %s to 10.0.0.1" % src)
             src.cmd("timeout 20s hping3 --udp -p 5051 --flood 10.0.0.1")
             sleep(2)
 
-            # Generowanie nadmiernych żądań HTTP
             print("%s performing HTTP Flood attack on 10.0.0.1" % src)
             src.cmd("for i in {1..200}; do timeout 1s curl -s http://10.0.0.1/index.html; sleep 0.1; done")
             sleep(2)
 
-            # Próba logowania SSH (Brute Force)
             print("Attempting SSH Brute Force attack from %s to 10.0.0.2" % src)
             src.cmd("timeout 30s hydra -l root -P /home/joanna/Downloads/5G_Anomaly_Detection/src/ssh/rockyou.txt 10.0.0.2 ssh")
             sleep(2)
 
-            # Generowanie anomalnego ruchu strumieniowania wideo (wysoka przepustowość)
             print("Streaming high-bandwidth video from %s to 10.0.0.2 via UDP" % src)
             src.cmd("timeout 30s ffmpeg -re -i /home/joanna/Downloads/5G_Anomaly_Detection/src/videos/video.mp4 -vf scale=1920:1080 -b:v 5000k -f mpegts udp://10.0.0.2:1234")
             sleep(2)
 
-            # Generowanie IoT złośliwych wiadomości (MQTT)
             print("Publishing anomalous MQTT messages from %s to topic 'sensor/temperature' on 10.0.0.2" % src)
             src.cmd("for i in {1..1000}; do mosquitto_pub -h 10.0.0.2 -t 'sensor/temperature' -m 'malicious'; sleep 0.05; done")
             sleep(2)
 
-            # Generowanie anomalii VoIP (wysoki ruch)
             print("Generating high traffic VoIP from %s to 10.0.0.2 via SIP" % src)
             src.cmd("timeout 20s sipp -sn uac 10.0.0.2:5060 -r 1000 -m 1000")
             sleep(2)
 
-            # Generowanie anomalii DNS (wysoki ruch DNS)
-            #print("Generating DNS Flood from %s to 10.0.0.2 for domain 'example.com'" % src)
-            #src.cmd("for i in {1..100}; do timeout 5s dig @10.0.0.2 example.com; done")
-            #sleep(2)
-
             print("--------------------------------------------------------------------------------")  
 
 
-        # Czyszczenie pobranych plików
         h1.cmd("rm -f /home/joanna/Downloads/5G_Anomaly_Detection/src/mininet/Downloads/*")
 
     print("--------------------------------------------------------------------------------")  
