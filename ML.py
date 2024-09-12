@@ -113,11 +113,6 @@ def main():
     end = datetime.now()
     print("LEARNING and PREDICTING Time: ", (end-start))
     
-    # start = datetime.now()
-    # ml.SVM()
-    # end = datetime.now()
-    # print("LEARNING and PREDICTING Time: ", (end-start))
-    
     start = datetime.now()
     ml.NB()
     end = datetime.now()
