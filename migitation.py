@@ -135,8 +135,7 @@ class SimpleMonitor13(switchm.SimpleSwitch13):
 
         y_flow_pred = self.flow_model.predict(X_flow_test)
 
-        #self.logger.info("------------------------------------------------------------------------------")
-
+        
         self.logger.info("Confusion Matrix")
         cm = confusion_matrix(y_flow_test, y_flow_pred)
         self.logger.info(cm)
