@@ -17,7 +17,7 @@ class MachineLearning():
         
         print("Loading dataset ...")
         
-        self.flow_dataset = pd.read_csv('/home/joanna/Downloads/5G_Anomaly_Detection/src/FlowStatsfile.csv')
+        self.flow_dataset = pd.read_csv('FlowStatsfile.csv')
 
         self.flow_dataset.iloc[:, 2] = self.flow_dataset.iloc[:, 2].str.replace('.', '')
         self.flow_dataset.iloc[:, 3] = self.flow_dataset.iloc[:, 3].str.replace('.', '')
