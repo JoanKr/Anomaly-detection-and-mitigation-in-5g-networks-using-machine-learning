@@ -13,10 +13,10 @@ class CollectTrainingStatsApp(switch.SimpleSwitch13):
         self.monitor_thread = hub.spawn(self.monitor)
 
         try:
-            with open("/home/joanna/Downloads/5G_Anomaly_Detection/src/FlowStatsfile.csv", "r") as file_check:
+            with open("FlowStatsfile.csv", "r") as file_check:
                 pass  
         except FileNotFoundError:
-            with open("/home/joanna/Downloads/5G_Anomaly_Detection/src/FlowStatsfile.csv", "w") as file0:
+            with open("FlowStatsfile.csv", "w") as file0:
                 file0.write('timestamp,datapath_id,flow_id,ip_src,tp_src,ip_dst,tp_dst,ip_proto,icmp_code,icmp_type,flow_duration_sec,flow_duration_nsec,idle_timeout,hard_timeout,flags,packet_count,byte_count,packet_count_per_second,packet_count_per_nsecond,byte_count_per_second,byte_count_per_nsecond,label\n')
 
     @set_ev_cls(ofp_event.EventOFPStateChange, [MAIN_DISPATCHER, DEAD_DISPATCHER])
@@ -51,7 +51,7 @@ class CollectTrainingStatsApp(switch.SimpleSwitch13):
         tp_src = 0
         tp_dst = 0
 
-        with open("/home/joanna/Downloads/5G_Anomaly_Detection/src/FlowStatsfile.csv", "a+") as file0:
+        with open("FlowStatsfile.csv", "a+") as file0:
             body = ev.msg.body
             for stat in sorted([flow for flow in body if (flow.priority == 1)], key=lambda flow:
                 (flow.match['eth_type'], flow.match['ipv4_src'], flow.match['ipv4_dst'], flow.match['ip_proto'])):
