@@ -147,3 +147,6 @@ Ostatni przypadek to ruch tylko i wyłącznie złośliwy. Plik `anomaly_traffic.
 
 ![App Screenshot](ss/3.png)
 
+## Bibliografia
+[https://github.com/chiragbiradar/DDoS-Attack-Detection-and-Mitigation.git] https://github.com/chiragbiradar/DDoS-Attack-Detection-and-Mitigation.git
+
