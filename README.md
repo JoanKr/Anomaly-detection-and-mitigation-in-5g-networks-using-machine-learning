@@ -12,6 +12,7 @@ Ten projekt implementuje system do wykrywania i łagodzenia ataków w sieciach 5
 - [Uczenie Maszynowe](#Uczenie-Maszynowe)
 - [Przeciwdziałanie](#Przeciwdziałanie)
 - [Przykład działania](#Przykład-działania)
+- [Bibliografia](#Bibliografia)
 ## Technologie
 - **VirtualBox (Ubuntu):** Wirtualne środowisko, w którym uruchamiana jest symulacja sieci i wszystkie potrzebne narzędzia, aby zachować izolację od systemu hosta.
 - **Python 3.7.17:** Język programowania, w którym napisane są skrypty do uczenia maszynowego, analizy ruchu sieciowego i obsługi kontrolera SDN.
@@ -148,5 +149,5 @@ Ostatni przypadek to ruch tylko i wyłącznie złośliwy. Plik `anomaly_traffic.
 ![App Screenshot](ss/3.png)
 
 ## Bibliografia
-[https://github.com/chiragbiradar/DDoS-Attack-Detection-and-Mitigation.git] https://github.com/chiragbiradar/DDoS-Attack-Detection-and-Mitigation.git
+https://github.com/chiragbiradar/DDoS-Attack-Detection-and-Mitigation.git
 
